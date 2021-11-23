@@ -11,7 +11,7 @@ const ballSize = 20; //wielkość piłki
 let ballX = cw/2 - ballSize/2;
 let ballY = ch/2 - ballSize/2;
 
-let BallSpeedX = 1;
+let ballSpeedX = 1;
 let ballSpeedY = 1;
 
 const paddelHeight = 100;
@@ -43,13 +43,14 @@ function ball()
     ctx.fillStyle = "white";
     ctx.fillRect(ballX, ballY, ballSize, ballSize);
 
-    ballX += BallSpeedX;
+    ballX += ballSpeedX;
     ballY += ballSpeedY;
 
-    if(ballY === ch-ballSize)
-    {
-        ballSpeedY = -1;
-    }
+    if(ballY === ch-ballSize) ballSpeedY = -1;
+    else if(ballX === cw-ballSize) ballSpeedX = -1;
+    else if(ballY === 0) ballSpeedY = 1;
+    else if(ballX === 0) ballSpeedX = 1;
+    
 }
 
 function player()
