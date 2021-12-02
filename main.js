@@ -11,8 +11,8 @@ const ballSize = 20; //wielkość piłki
 let ballX = cw/2 - ballSize/2;
 let ballY = ch/2 - ballSize/2;
 
-let ballSpeedX = 3;
-let ballSpeedY = 3;
+let ballSpeedX = -2;
+let ballSpeedY = -2;
 
 const paddelHeight = 100;
 const paddelWidth = 20;
@@ -62,24 +62,32 @@ function ball()
     //odbijanie piłki od paletki
     else if(
          ballX <= playerX + paddelWidth &&
-         ballX >= playerX - ballSize&&
-         ballY > playerY - ballSize/2 &&
-         ballY < playerY+paddelHeight + ballSize/2)
+         ballX >= playerX &&
+         ballY > playerY - ballSize &&
+         ballY < playerY+paddelHeight)
     {
         ballX += 2;
         ballSpeedX = -ballSpeedX;
         speedUp();
     }
-    
-
-
+    //odbijanie piłki od paletki2
+    else if(
+        ballX >= player2X - ballSize &&
+        ballY > player2Y - ballSize &&
+        ballY < player2Y+paddelHeight)
+   {
+       ballX -= 2;
+       ballSpeedX = -ballSpeedX;
+       speedUp();
+   }
+  
 }
 
 //Rysowanie Paletki
 
 function player()
 {
-    ctx.fillStyle = "green";
+    ctx.fillStyle = "blue";
     ctx.fillRect(playerX, playerY, paddelWidth, paddelHeight);
 }
 
@@ -87,7 +95,7 @@ function player()
 
 function player2()
 {
-    ctx.fillStyle = "yellow";
+    ctx.fillStyle = "red";
     ctx.fillRect(player2X, player2Y, paddelWidth, paddelHeight);
 }
 
@@ -100,6 +108,7 @@ function playerPosition(e)
 
     if(playerY <= 0) playerY = 0;
     else if (playerY >= ch-paddelHeight) playerY = ch-paddelHeight;
+
    
 }
 
@@ -107,18 +116,35 @@ function playerPosition(e)
 
 function aiPosition()
 {
+    const middlePaddel = player2Y + paddelHeight/2;
+    const middleBall = ballY+ ballSize/2;
 
+    if (ballX > cw/2)
+    {
+        if(middlePaddel - middleBall > 200) player2Y -= 15;
+        else if(middlePaddel - middleBall > 50) player2Y -= 5;
+        
+        else if(middlePaddel - middleBall < -200) player2Y +- 15;
+        else if (middlePaddel - middleBall < -50) player2Y += 5;
+    }
+    else if(ballX <= cw/2 && ballX > 150)
+    {
+        if(middlePaddel - middleBall > 100) player2Y -=3;
+        else if(middlePaddel - middleBall < -100) player2Y +=3;
+    }
 }
 
 canvas.addEventListener("mousemove", playerPosition);
 
 function speedUp()
 {
-    if(ballSpeedX<0 && ballSpeedX < 16) ballSpeedX -= .2;
+    if(ballSpeedX<0 && ballSpeedX > -16) ballSpeedX -= .2;
     if(ballSpeedX>0 && ballSpeedX < 16) ballSpeedX += .2;
 
-    if(ballSpeedY<0 && ballSpeedY < 16) ballSpeedY -= .1;
+    if(ballSpeedY<0 && ballSpeedY > -16) ballSpeedY -= .1;
     if(ballSpeedY>0 && ballSpeedY < 16) ballSpeedY += .1;
+
+    //document.querySelector(".pong").play();
 }
 
 function game()
@@ -130,11 +156,3 @@ player2();
 aiPosition();
 }
 setInterval(game, 1000/ 60);
-
-/*  else if(ballX <= 0 || ballX >= cw - ballSize)
-    {
-        ballSpeedX = -ballSpeedX;
-        speedUp();
-    }
-
-*/
