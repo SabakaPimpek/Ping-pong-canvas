@@ -144,7 +144,7 @@ function speedUp()
     if(ballSpeedY<0 && ballSpeedY > -16) ballSpeedY -= .1;
     if(ballSpeedY>0 && ballSpeedY < 16) ballSpeedY += .1;
 
-    //document.querySelector(".pong").play();
+
 }
 
 function game()
