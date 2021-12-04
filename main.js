@@ -7,9 +7,11 @@ canvas.height = 500;
 const cw = canvas.width;
 const ch = canvas.height;
 
+ctx.font = 'italic 30px Arial';
+
 const ballSize = 20; //wielkość piłki
-let ballX = cw/2 - ballSize/2;
-let ballY = ch/2 - ballSize/2;
+let ballX;
+let ballY;
 
 let ballSpeedX = -2;
 let ballSpeedY = -2;
@@ -25,6 +27,9 @@ let player2Y = 200;
 
 const lineWidth = 6;
 const lineHeight = 16;
+
+let scoreP1 = 0;
+let scoreP2 = 0;
 
 // Rysowanie stołu
 function table()
@@ -54,11 +59,17 @@ function ball()
         ballSpeedY = -ballSpeedY;
         speedUp();
     } 
-    else if(ballX <= 0 || ballX >= cw - ballSize)
+    else if(ballX <= 0) 
     {
-        ballSpeedX = -ballSpeedX;
-        speedUp();
+        setUp();
+        scoreP2++;
     }
+    else if(ballX >= cw - ballSize)
+    {
+        setUp();
+        scoreP1++;
+    }
+
     //odbijanie piłki od paletki
     else if(
          ballX <= playerX + paddelWidth &&
@@ -147,9 +158,43 @@ function speedUp()
 
 }
 
+// Set up game
+
+function setUp()
+{
+    ballX = cw/2 - ballSize/2;
+    ballY = ch/2 - ballSize/2;
+
+    ballSpeedX = random();
+    ballSpeedY = random();
+
+    function random()
+    {
+        let result = Math.random() * (2 - -2) + -2;
+
+        if (result < 1 && result >= 0) result++;
+        else if(result > -1 && result <= 0) result--;
+
+        return result;
+    }
+}
+
+//Game score
+
+function score()
+{
+    ctx.fillText(scoreP1, cw / 2 - 100, 50);
+    ctx.fillText(scoreP2, cw / 2 + 80, 50)
+}
+
+// GAME 
+
+setUp();
+
 function game()
 {
 table();
+score();
 ball();
 player();
 player2();
