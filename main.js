@@ -8,6 +8,7 @@ const cw = canvas.width;
 const ch = canvas.height;
 
 ctx.font = 'italic 30px Arial';
+ctx.textAlign = "center";
 
 const ballSize = 20; //wielkość piłki
 let ballX;
@@ -30,6 +31,8 @@ const lineHeight = 16;
 
 let scoreP1 = 0;
 let scoreP2 = 0;
+
+let pongSound = true;
 
 // Rysowanie stołu
 function table()
@@ -150,12 +153,15 @@ canvas.addEventListener("mousemove", playerPosition);
 function speedUp()
 {
     if(ballSpeedX<0 && ballSpeedX > -16) ballSpeedX -= .2;
-    if(ballSpeedX>0 && ballSpeedX < 16) ballSpeedX += .2;
+    else if(ballSpeedX>0 && ballSpeedX < 16) ballSpeedX += .2;
 
-    if(ballSpeedY<0 && ballSpeedY > -16) ballSpeedY -= .1;
-    if(ballSpeedY>0 && ballSpeedY < 16) ballSpeedY += .1;
+    else if(ballSpeedY<0 && ballSpeedY > -16) ballSpeedY -= .1;
+    else if(ballSpeedY>0 && ballSpeedY < 16) ballSpeedY += .1;
 
+    (pongSound === true) ? new Audio("audio/pong0.wav").play()
+    : new Audio("audio/pong1.wav").play();
 
+    pongSound = !pongSound;
 }
 
 // Set up game
@@ -183,8 +189,27 @@ function setUp()
 
 function score()
 {
+    ctx.fillStyle = "red";
     ctx.fillText(scoreP1, cw / 2 - 100, 50);
-    ctx.fillText(scoreP2, cw / 2 + 80, 50)
+    ctx.fillText(scoreP2, cw / 2 + 100, 50);
+
+    if(scoreP1 === 3) result(1);
+    else if(scoreP2 === 3) result(2);
+
+    function result(win)
+    {
+        ctx.fillText("Gracz "+ win + " wygrywa grę!",cw/2, ch/2)
+        clearInterval(displayGame);
+        setTimeout(newGame, 1000);
+        scoreP1 = 0;
+        scoreP2 = 0;
+        setUp();
+
+        function newGame()
+        {
+            displayGame = setInterval(game, 1000/ 60);
+        }
+    }
 }
 
 // GAME 
@@ -200,4 +225,4 @@ player();
 player2();
 aiPosition();
 }
-setInterval(game, 1000/ 60);
+let displayGame = setInterval(game, 1000/ 60);
