@@ -115,15 +115,28 @@ function player2()
 
 topCanvas = canvas.offsetTop;
 leftCanvas = canvas.offsetLeft;
+let mouse = {x: 0, y: 0, isClicked: false}
+canvas.addEventListener("mousemove", (e) => 
+{
+    mouseX = e.clientX - leftCanvas;
+    mouseY = e.clientY - topCanvas;
+
+    mouse = {x: mouseX, y: mouseY};
+    
+    playerPosition(mouseY);
+});
+
+canvas.addEventListener("click", () =>
+{
+    mouse.isClicked = true;
+});
 
 function playerPosition(e)
 {
-    playerY = e.clientY - topCanvas - paddelHeight/2;
+    playerY = e - paddelHeight/2;
 
     if(playerY <= 0) playerY = 0;
     else if (playerY >= ch-paddelHeight) playerY = ch-paddelHeight;
-
-   
 }
 
 //AI
@@ -147,8 +160,6 @@ function aiPosition()
         else if(middlePaddel - middleBall < -100) player2Y +=3;
     }
 }
-
-canvas.addEventListener("mousemove", playerPosition);
 
 function speedUp()
 {
@@ -198,17 +209,23 @@ function score()
 
     function result(win)
     {
-        ctx.fillText("Gracz "+ win + " wygrywa grę!",cw/2, ch/2)
-        clearInterval(displayGame);
+        ctx.fillText("Player "+ win + " wins!",cw/2, ch/2)
+        clearInterval(display);
         setTimeout(newGame, 1000);
         scoreP1 = 0;
         scoreP2 = 0;
         setUp();
+        newGame();
+    }
+}
 
-        function newGame()
-        {
-            displayGame = setInterval(game, 1000/ 60);
-        }
+function newGame()
+{
+    if(isGameStarted === false)
+    {
+        clearInterval(display)
+        display = setInterval(game, 1000/ 60);
+        isGameStarted = true;
     }
 }
 
@@ -225,4 +242,4 @@ player();
 player2();
 aiPosition();
 }
-let displayGame = setInterval(game, 1000/ 60);
+
