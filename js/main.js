@@ -226,6 +226,7 @@ function newGame()
         clearInterval(display)
         display = setInterval(game, 1000/ 60);
         isGameStarted = true;
+        canvas.style.cursor = "none";
     }
 }
 
