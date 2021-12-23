@@ -34,6 +34,10 @@ let scoreP2 = 0;
 
 let pongSound = true;
 
+const topCanvas = canvas.offsetTop;
+const leftCanvas = canvas.offsetLeft;
+let mouse = {x: 0, y: 0, isClicked: false}
+
 // Rysowanie stołu
 function table()
 {
@@ -66,11 +70,13 @@ function ball()
     {
         setUp();
         scoreP2++;
+        new Audio("audio/score.ogg").play()
     }
     else if(ballX >= cw - ballSize)
     {
         setUp();
         scoreP1++;
+        new Audio("audio/score.ogg").play()
     }
 
     //odbijanie piłki od paletki
@@ -113,9 +119,6 @@ function player2()
     ctx.fillRect(player2X, player2Y, paddelWidth, paddelHeight);
 }
 
-topCanvas = canvas.offsetTop;
-leftCanvas = canvas.offsetLeft;
-let mouse = {x: 0, y: 0, isClicked: false}
 canvas.addEventListener("mousemove", (e) => 
 {
     mouseX = e.clientX - leftCanvas;
@@ -211,22 +214,22 @@ function score()
     {
         ctx.fillText("Player "+ win + " wins!",cw/2, ch/2)
         clearInterval(display);
-        setTimeout(newGame, 1000);
+        flags.isGameStarted = false;
+        setTimeout(startGame, 1000);
         scoreP1 = 0;
         scoreP2 = 0;
-        setUp();
-        newGame();
     }
 }
 
-function newGame()
+function startGame()
 {
-    if(isGameStarted === false)
+    if(flags.isGameStarted === false)
     {
         clearInterval(display)
         display = setInterval(game, 1000/ 60);
-        isGameStarted = true;
+        flags.isGameStarted = true;
         canvas.style.cursor = "none";
+        setUp();
     }
 }
 
