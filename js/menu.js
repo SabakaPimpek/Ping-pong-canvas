@@ -15,7 +15,7 @@ class Button
         
         let buttonLength = ctx.measureText(this.text).width;
 
-        if(mouse.y >= this.posY-30 && mouse.y <= this.posY+30
+        if(mouse.y >= this.posY-30 && mouse.y <= this.posY
             && mouse.x >= this.posX - buttonLength/2
             && mouse.x <= this.posX + buttonLength/2 ) 
         {
