@@ -14,8 +14,8 @@ const ballSize = 20; //wielkość piłki
 let ballX;
 let ballY;
 
-let ballSpeedX = -2;
-let ballSpeedY = -2;
+let ballSpeedX;
+let ballSpeedY;
 
 const paddelHeight = 100;
 const paddelWidth = 20;
@@ -166,11 +166,11 @@ function aiPosition()
 
 function speedUp()
 {
-    if(ballSpeedX<0 && ballSpeedX > -16) ballSpeedX -= .2;
-    else if(ballSpeedX>0 && ballSpeedX < 16) ballSpeedX += .2;
+    if(ballSpeedX<0 && ballSpeedX > -16) ballSpeedX -= 1;
+    else if(ballSpeedX>0 && ballSpeedX < 16) ballSpeedX += 1;
 
-    else if(ballSpeedY<0 && ballSpeedY > -16) ballSpeedY -= .1;
-    else if(ballSpeedY>0 && ballSpeedY < 16) ballSpeedY += .1;
+    else if(ballSpeedY<0 && ballSpeedY > -16) ballSpeedY -= 1;
+    else if(ballSpeedY>0 && ballSpeedY < 16) ballSpeedY += 1;
 
     (pongSound === true) ? new Audio("audio/pong0.wav").play()
     : new Audio("audio/pong1.wav").play();
@@ -188,14 +188,11 @@ function setUp()
     ballSpeedX = random();
     ballSpeedY = random();
 
+    if(ballSpeedX === 0 || ballSpeedY === 0) setUp();
+
     function random()
     {
-        let result = Math.random() * (2 - -2) + -2;
-
-        if (result < 1 && result >= 0) result++;
-        else if(result > -1 && result <= 0) result--;
-
-        return result;
+        return Math.floor(Math.random() * (2 - -2 + 1) ) + -2;
     }
 }
 
