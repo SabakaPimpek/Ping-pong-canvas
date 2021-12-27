@@ -2,6 +2,11 @@
 
 Added:
 
+1.2.04
++Game is now faster
+
+1.2.03 +Fixed bug
+
 1.2.02 +Added score sound and fixed few things in code.
 
 1.2.01 +Added Info section in main menu
