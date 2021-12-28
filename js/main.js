@@ -33,9 +33,6 @@ let scoreP1 = 0;
 let scoreP2 = 0;
 
 let pongSound = true;
-
-const topCanvas = canvas.offsetTop;
-const leftCanvas = canvas.offsetLeft;
 let mouse = {x: 0, y: 0, isClicked: false}
 
 // Rysowanie stołu
@@ -121,8 +118,8 @@ function player2()
 
 canvas.addEventListener("mousemove", (e) => 
 {
-    mouseX = e.clientX - leftCanvas;
-    mouseY = e.clientY - topCanvas;
+    mouseX = e.clientX - canvas.offsetLeft;
+    mouseY = e.clientY - canvas.offsetTop;
 
     mouse = {x: mouseX, y: mouseY};
     
@@ -209,10 +206,11 @@ function score()
 
     function result(win)
     {
-        ctx.fillText("Player "+ win + " wins!",cw/2, ch/2)
+        ctx.fillText("Player "+ win + " wins!", cw/2, ch/2)
         clearInterval(display);
         flags.isGameStarted = false;
-        setTimeout(startGame, 1000);
+        canvas.style.cursor = "default";
+        setTimeout(menu.startMenu, 1000);
         scoreP1 = 0;
         scoreP2 = 0;
     }
