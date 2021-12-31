@@ -29,8 +29,8 @@ let player2Y = 200;
 const lineWidth = 6;
 const lineHeight = 16;
 
-let scoreP1 = 0;
-let scoreP2 = 0;
+let scoreP1;
+let scoreP2;
 
 let pongSound = true;
 
@@ -202,19 +202,8 @@ function score()
     ctx.fillText(scoreP1, cw / 2 - 100, 50);
     ctx.fillText(scoreP2, cw / 2 + 100, 50);
 
-    if(scoreP1 === settings.pointsToWin) result(1);
-    else if(scoreP2 === settings.pointsToWin) result(2);
-
-    function result(win)
-    {
-        ctx.fillText("Player "+ win + " wins!", cw/2, ch/2)
-        clearInterval(display);
-        flags.isGameStarted = false;
-        canvas.style.cursor = "default";
-        setTimeout(menu.startMenu, 1000);
-        scoreP1 = 0;
-        scoreP2 = 0;
-    }
+    if(scoreP1 === settings.pointsToWin) menu.gameEnd(1);
+    else if(scoreP2 === settings.pointsToWin) menu.gameEnd(2);
 }
 
 const sound =
@@ -226,17 +215,19 @@ const sound =
 
 function playSound(name)
 {
-    if(settings.sound === "ON") name.play()
+    if(settings.sound === "ON") name.play();
 }
 
 function startGame()
 {
     if(flags.isGameStarted === false)
     {
-        clearInterval(display)
+        clearInterval(display);
         display = setInterval(game, 1000/ 60);
         flags.isGameStarted = true;
         canvas.style.cursor = "none";
+        scoreP1 = 0;
+        scoreP2 = 0;
         setUp();
     }
 }

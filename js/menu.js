@@ -61,8 +61,8 @@ const menu =
           buttons[0] = new Button(cw/2, ch-40, "Return", menu.startMenu); 
           buttons[1] = new Button(cw/2 - 50, 130, "<", decrement);
           buttons[2] = new Button(cw/2 + 50, 130, ">", increment);
-          buttons[3] = new Button(cw/2 - 50, 130*2, "<", "");
-          buttons[4] = new Button(cw/2 + 50, 130*2, ">", "");
+          buttons[3] = new Button(cw/2 - 100, 130*2, "<", "");
+          buttons[4] = new Button(cw/2 + 100, 130*2, ">", "");
           buttons[5] = new Button(cw/2 - 50, 130*3, "<", changeSounds);
           buttons[6] = new Button(cw/2 + 50, 130*3, ">", changeSounds);
           
@@ -70,7 +70,7 @@ const menu =
         function SettingsMenu()
         {  
             let texts = ["Points to win", settings.pointsToWin ,
-            "Background color", settings.bgColor,
+            "Game Difficulty", settings.difficulty,
             "Sounds", settings.sound];
 
             ctx.fillStyle = "black";
@@ -153,6 +153,51 @@ const menu =
             });
         }
     
+    },
+
+    //------------------------------------------------------------
+    gameEnd: (win) =>
+    {
+        clearInterval(display);
+        display = setInterval(tryAgain, 1000/60);
+        let buttons = [];
+        buttons[0] = new Button(cw/2, ch/2 + 50, "Try Again", startGame);
+        buttons[1] = new Button(cw/2, ch/2 + 100, "Main menu", menu.startMenu);
+        flags.isGameStarted = false;
+        canvas.style.cursor = "default";
+
+        let player = win;
+
+        tryAgain(win);
+
+
+        function tryAgain()
+        {
+            table();
+            buttons.forEach((number, i) =>
+            {
+                buttons[i].write();
+            });
+
+            writeText();
+        }
+
+        function writeText()
+        {
+            const text = "Player "+ player + " wins!";
+            const size = ctx.measureText(text).width;
+
+            ctx.font = "bold 60px atari"
+            ctx.fillStyle = "red";
+            ctx.fillText(scoreP1, cw/2 - 80, ch/2 - 80);
+            ctx.fillText(scoreP2, cw/2 + 80, ch/2 - 80);
+            ctx.font = "bold 30px atari"
+            ctx.fillStyle = "white";
+            ctx.fillRect(cw/2 - size/2 - 10, ch/2-40, size + 10, 40);
+            ctx.fillStyle = "black";
+            ctx.fillText(text, cw/2, ch/2);
+        }
+
     }
 
 }
@@ -167,7 +212,7 @@ const flags =
 const settings =
 {
     pointsToWin: 3,
-    bgColor: "b",
+    difficulty: "Medium",
     sound: "ON"
 }
 

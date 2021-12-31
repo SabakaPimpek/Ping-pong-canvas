@@ -1,6 +1,9 @@
 
 Added:
 
+1.4
++New ending screen.
+
 1.3
 +Added settings. You can choose, how many points is needed to win. (Default: 3)
 You can also turn off or turn on sounds. (Default: ON)
