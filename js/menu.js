@@ -9,10 +9,12 @@ class Button
         this.func = func;
     }
 
+    /*This function draw clickable button (text) on screen.
+     When hovering, button changes color to red.
+     When clicked, function starts (func)*/
+
     write()
     {
-        ctx.font = 'bold 30px Atari';
-        
         let buttonLength = ctx.measureText(this.text).width;
 
         if(mouse.y >= this.posY-30 && mouse.y <= this.posY
@@ -32,13 +34,10 @@ class Button
 
 }
 
+/* Object with all functions responsible for menu*/
+
 const menu = 
 {
-    mainMenu: () => {
-        menu.background();
-        menu.buttonWrite();
-    },
-    
     background: () => {
         ctx.fillStyle = "black";
         ctx.fillRect(0, 0, cw, ch);
@@ -48,55 +47,128 @@ const menu =
         ctx.fillText("PING PONG", cw / 2, ch / 4);
     },
 
-    buttonWrite: () =>
+// --------------------------------------------------------------------------------------------
+
+    startSettings: () =>
+    {
+        
+        clearInterval(display);
+        display = setInterval(SettingsMenu, 1000/60);
+
+
+        // DO POPRAWY (W PĘTLI)
+          let buttons = []
+          buttons[0] = new Button(cw/2, ch-40, "Return", menu.startMenu); 
+          buttons[1] = new Button(cw/2 - 50, 130, "<", decrement);
+          buttons[2] = new Button(cw/2 + 50, 130, ">", increment);
+          buttons[3] = new Button(cw/2 - 50, 130*2, "<", "");
+          buttons[4] = new Button(cw/2 + 50, 130*2, ">", "");
+          buttons[5] = new Button(cw/2 - 50, 130*3, "<", changeSounds);
+          buttons[6] = new Button(cw/2 + 50, 130*3, ">", changeSounds);
+          
+
+        function SettingsMenu()
+        {  
+            let texts = ["Points to win", settings.pointsToWin ,
+            "Background color", settings.bgColor,
+            "Sounds", settings.sound];
+
+            ctx.fillStyle = "black";
+            ctx.fillRect(0,0,cw,ch);
+            ctx.font = "bold 24px Atari"
+
+            buttons.forEach((number, i) =>
+            {
+                buttons[i].write();
+            });
+
+            texts.forEach((number, i) =>
+            {
+                ctx.fillStyle = "white";
+                ctx.fillText(number, cw/2, 65 + 65*i);
+            });
+        }
+
+        function decrement()
         {
-        for(i=0; i<3; i++)
+            if(settings.pointsToWin > 2) settings.pointsToWin--;
+        }
+        function increment()
         {
-            buttons[i].write();
+            if(settings.pointsToWin < 10) settings.pointsToWin++;
+        }
+        function changeSounds()
+        {
+            if (settings.sound === "ON") settings.sound = "OFF";
+            else settings.sound = "ON";
         }
     },
 
+// --------------------------------------------------------------------------------------------
+
     startInfo: () =>
     {
-        {
             clearInterval(display)
             display = setInterval(infoMenu, 1000/ 60);
-            buttons[3] = new Button(cw/2, ch-100, "Return", menu.startMenu)
-        }
+            let buttons = new Button(cw/2, ch-100, "Return", menu.startMenu)
 
         function infoMenu()
         {
             ctx.fillStyle = "white";
             menu.background();
             ctx.font = 'bold 30px Atari';
-            ctx.fillText("Gra zrobiona przez:", cw/2, ch/2);
+            ctx.fillText("Game made by:", cw/2, ch/2);
             ctx.fillText("Sabaka Pimpek  2021", cw/2, ch/2 + 50)
-            buttons[3].write();
+            buttons.write();
         }
     },
+
+// --------------------------------------------------------------------------------------------
 
     startMenu: () =>
     {   
         clearInterval(display);
-        display = setInterval(menu.mainMenu, 1000/ 60);
+        display = setInterval(mainMenu, 1000/ 60);
 
+        let buttons = [];
+        let names = ["Play", "Options", "Info"]
+        let functions = [startGame, menu.startSettings, menu.startInfo]
+        for(i=0; i<3; i++)
+            {
+                buttons[i] = new Button(cw/2, ch/2 + i*100, names[i], functions[i])
+            }
+
+        function mainMenu() 
+        {
+            menu.background();
+            buttonWrite();
+        }   
+
+        function buttonWrite()
+        {
+            buttons.forEach((number, i) =>
+            {
+                ctx.font = 'bold 30px Atari';
+                buttons[i].write();
+            });
+        }
+    
     }
 
 }
-
-    let buttons = [];
-    let names = ["Play", "Options", "Info"]
-    let functions = [startGame,"", menu.startInfo]
-    for(i=0; i<3; i++)
-        {
-            buttons[i] = new Button(cw/2, ch/2 + i*100, names[i], functions[i])
-        }
 
 let display;
 
 const flags = 
 {
     isGameStarted: false
+}
+
+const settings =
+{
+    pointsToWin: 3,
+    bgColor: "b",
+    sound: "ON"
 }
 
 menu.startMenu();

@@ -33,6 +33,7 @@ let scoreP1 = 0;
 let scoreP2 = 0;
 
 let pongSound = true;
+
 let mouse = {x: 0, y: 0, isClicked: false}
 
 // Rysowanie stołu
@@ -67,13 +68,13 @@ function ball()
     {
         setUp();
         scoreP2++;
-        new Audio("audio/score.ogg").play()
+        playSound(sound.score);
     }
     else if(ballX >= cw - ballSize)
     {
         setUp();
         scoreP1++;
-        new Audio("audio/score.ogg").play()
+        playSound(sound.score);
     }
 
     //odbijanie piłki od paletki
@@ -169,8 +170,8 @@ function speedUp()
     else if(ballSpeedY<0 && ballSpeedY > -16) ballSpeedY -= 1;
     else if(ballSpeedY>0 && ballSpeedY < 16) ballSpeedY += 1;
 
-    (pongSound === true) ? new Audio("audio/pong0.wav").play()
-    : new Audio("audio/pong1.wav").play();
+    (pongSound === true) ? playSound(sound.pong0)
+    : playSound(sound.pong1);
 
     pongSound = !pongSound;
 }
@@ -201,8 +202,8 @@ function score()
     ctx.fillText(scoreP1, cw / 2 - 100, 50);
     ctx.fillText(scoreP2, cw / 2 + 100, 50);
 
-    if(scoreP1 === 3) result(1);
-    else if(scoreP2 === 3) result(2);
+    if(scoreP1 === settings.pointsToWin) result(1);
+    else if(scoreP2 === settings.pointsToWin) result(2);
 
     function result(win)
     {
@@ -214,6 +215,18 @@ function score()
         scoreP1 = 0;
         scoreP2 = 0;
     }
+}
+
+const sound =
+{
+    score: new Audio ("audio/score.ogg"),
+    pong0: new Audio ("audio/pong0.wav"),
+    pong1: new Audio ("audio/pong1.wav")
+}
+
+function playSound(name)
+{
+    if(settings.sound === "ON") name.play()
 }
 
 function startGame()
@@ -229,9 +242,6 @@ function startGame()
 }
 
 // GAME 
-
-setUp();
-
 function game()
 {
 table();
