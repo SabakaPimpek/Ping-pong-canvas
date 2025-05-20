@@ -127,6 +127,15 @@ canvas.addEventListener("mousemove", (e) =>
     playerPosition(mouseY);
 });
 
+canvas.addEventListener("pointerdown", (e) => {
+    mouseX = e.clientX - canvas.offsetLeft;
+    mouseY = e.clientY - canvas.offsetTop;
+
+    mouse = {x: mouseX, y: mouseY};
+    
+    playerPosition(mouseY);
+})
+
 canvas.addEventListener("click", () =>
 {
     mouse.isClicked = true;
